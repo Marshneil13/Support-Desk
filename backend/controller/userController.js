@@ -8,6 +8,8 @@ const User = require('../models/userModel')
 // @route /api/users
 // @access Public (whether we need some token to authenticate)
 // the aim to register a user is to get that token to be used further hence it is public
+
+
 const registerUser = asyncHandler(async (req, res) => {
     const {name, email, password} = req.body
     //data is stored in the req.body
@@ -40,7 +42,7 @@ const registerUser = asyncHandler(async (req, res) => {
     })
 
     if(user){
-        res.sendStatus(201).json({
+        res.status(201).json({
             _id: user._id,
             //mongoDB stores ids as _id
             name: user.name,
@@ -52,6 +54,7 @@ const registerUser = asyncHandler(async (req, res) => {
         throw new error('Invalid user data')
     }
 })
+
 
 // @desc Login an existing user
 // @route /api/users/login
@@ -75,6 +78,23 @@ const loginUser = asyncHandler(async (req, res) => {
     console.log(res.json)
 })
 
+// @desc Get Current user
+// @route /api/users/me
+// @access Private (whether we need some token to authenticate)
+// the aim to register a user is to get that token to be used further hence it is public
+
+
+const getMe = asyncHandler(async (req, res) => {
+
+    const user = {
+        id: req.user._id,
+        email: req.user.email,
+        name: req.user.name
+    }
+    res.status(200).json(user)
+    //this req.user is from line 20 in authMiddleware.js
+})
+
 //Generate token
 const generateToken = (id) => {
     return jwt.sign({id}, process.env.JWT_SECRET, {
@@ -85,4 +105,5 @@ const generateToken = (id) => {
 module.exports = {
     registerUser,
     loginUser,
+    getMe,
 }
