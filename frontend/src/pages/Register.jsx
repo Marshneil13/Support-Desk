@@ -27,6 +27,8 @@ function Register() {
       if(isError){
           toast.error(message)
       }
+
+      // Redirect when logged in
       if(isSuccess || user){
           navigate('/')
       }
