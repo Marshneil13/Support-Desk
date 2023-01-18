@@ -1,47 +1,49 @@
 import { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import {useNavigate} from "react-router-dom"
+import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-import {createTicket, reset} from '../features/tickets/ticketSlice'
+import { createTicket, reset } from "../features/tickets/ticketSlice";
 import Spinner from "../components/Spinner";
 import BackButton from "../components/BackButton";
 
 function NewTicket() {
   const { user } = useSelector((state) => state.auth);
-  const {isLoading, isError, isSuccess, message} = useSelector((state) => state.tickets)
+  const { isLoading, isError, isSuccess, message } = useSelector(
+    (state) => state.tickets
+  );
   const [name] = useState(user.name);
   const [email] = useState(user.email);
-  const [product, setProduct] = useState('');
-  const [description, setDescription] = useState('');
+  const [product, setProduct] = useState("iPhone");
+  const [description, setDescription] = useState("");
 
-  const dispatch = useDispatch()
-  const navigate = useNavigate()
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   useEffect(() => {
-    if(isError){
-        toast.error(message)
+    if (isError) {
+      toast.error(message);
     }
 
-    if(isSuccess){
-        dispatch(reset())
-        navigate('/tickets')
+    if (isSuccess) {
+      dispatch(reset());
+      navigate("/tickets");
     }
 
-    dispatch(reset())
-  }, [dispatch, isError, isSuccess, navigate, message])
+    dispatch(reset());
+  }, [dispatch, isError, isSuccess, navigate, message]);
 
   const onSubmit = (e) => {
     e.preventDefault();
-    dispatch(createTicket({product, description}))
+    dispatch(createTicket({ product, description }));
   };
 
-  if(isLoading){
-      return <Spinner/>
+  if (isLoading) {
+    return <Spinner />;
   }
 
   return (
     <>
-    <BackButton url='/'/>
+      <BackButton url="/" />
       <section className="heading">
         <h1>Create New Ticket</h1>
         <p>Please fill out the form below</p>
@@ -66,7 +68,9 @@ function NewTicket() {
               value={product}
               onChange={(e) => setProduct(e.target.value)}
             >
-              <option disabled value='Select'>Select</option>  
+              <option disabled value="Select">
+                Select
+              </option>
               <option value="iPhone">iPhone</option>
               <option value="Macbook Pro">Macbook Pro</option>
               <option value="iMac">iMac</option>
@@ -85,7 +89,7 @@ function NewTicket() {
             ></textarea>
           </div>
           <div className="form-group">
-              <button className="btn btn-block">Submit</button>
+            <button className="btn btn-block">Submit</button>
           </div>
         </form>
       </section>
