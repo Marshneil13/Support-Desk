@@ -1,4 +1,4 @@
-// const path = require("path");
+const path = require("path");
 const express = require("express");
 const colors = require("colors");
 const dotenv = require("dotenv").config();
@@ -14,6 +14,17 @@ const app = express();
 //add middleware
 app.use(express.json()); //this allows to send raw json
 app.use(express.urlencoded({ extended: false }));
+
+// serving the frontend
+app.use(express.static(path.join(__dirname, "./frontend/build/index.html")));
+app.get("*", function (_, res) {
+  res.sendFile(
+    path.join(__dirname, "./frontend/build/index.html"),
+    function (err) {
+      res.status(500).send(err);
+    }
+  );
+});
 
 app.get("/", (req, res) => {
   res.status(200).json({ message: "Welcome to the Support Desk API" });
