@@ -23,7 +23,7 @@ const getTickets = async (token) => {
   };
 
   const response = await axios.get(API_URL, config);
-
+  console.log("RESPONSE", response);
   return response.data;
 };
 

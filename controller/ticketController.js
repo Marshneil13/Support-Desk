@@ -15,7 +15,9 @@ const getTickets = asyncHandler(async (req, res) => {
     throw new Error("User not found");
   }
   const tickets = await Ticket.find({ user: req.user.id });
+  console.log("Tickets", tickets);
   res.status(200).json(tickets);
+
   //this req.user is from line 20 in authMiddleware.js
 });
 
