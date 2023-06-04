@@ -1,32 +1,19 @@
-const path = require("path");
 const express = require("express");
 const colors = require("colors");
+const connectDB = require("./config/db");
 const dotenv = require("dotenv").config();
 const { errorHandler } = require("./middleware/errorMiddleware");
-const connectDB = require("./config/db");
-const PORT = process.env.PORT || 5000;
-
-// Connect to database
+const PORT = process.env.PORT || 8000;
+// looks for the environment variable, if not there it takes 8000 as port
+//Connect to database
 connectDB();
-
 const app = express();
-
 //add middleware
 app.use(express.json()); //this allows to send raw json
-app.use(express.urlencoded({ extended: false }));
-
-// serving the frontend
-app.use(express.static(path.join(__dirname, "./frontend/index.html")));
-app.get("/*", function (_, res) {
-  res.sendFile(path.join(__dirname, "./frontend/index.html"), function (err) {
-    res.status(500).send(err);
-  });
+app.use(express.urlencoded({ extended: false })); //to accept the urlencoded form
+app.get("/api/users", (req, res) => {
+  res.status(201).json({ message: "Welcome to the Support Desk API" });
 });
-
-app.get("/", (req, res) => {
-  res.status(200).json({ message: "Welcome to the Support Desk API" });
-});
-
 // Routes
 app.use("/api/users", require("./routes/userRoutes"));
 app.use("/api/tickets", require("./routes/ticketRoutes"));
